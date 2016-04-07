@@ -356,17 +356,8 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
             return function($viewValue, $modelValue, scope, element) {
                 var val = getFieldValueToValidate($viewValue, $modelValue, scope || element);
 
-                if (schemaValidatorObject.hideWhenExpression === "onArt !== 'a899b35c-1350-11df-a1f1-0026b9348838' && 1===1") {
-                    var a = 'me';
-                }
-
                 var options = (element ? element.options : undefined) || scope.options;
                 if (options && options.data && options.data.id) {
-
-                    if (options.data.id === 'current_art_regimen') {
-                        var a = 'me';
-                    }
-
                     var fields =
                         service.extractQuestionIds(schemaValidatorObject.disableWhenExpression ||
                             schemaValidatorObject.hideWhenExpression,
@@ -414,9 +405,9 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
                 if (isDisabled === true) {
                     if (element) {
                         //case hide
-                        if(element.options)
-                        CurrentLoadedFormService.clearQuestionValueByKey(scope ? scope.model: {} ,
-                            element.options.key.split('.')[0]);
+                        if (element.options)
+                            CurrentLoadedFormService.clearQuestionValueByKey(CurrentLoadedFormService.formModel,
+                                element.options.key.split('.')[0]);
                     }
                     else {
                         //case disable
@@ -424,9 +415,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
                             scope.options.key.split('.')[0]);
                     }
                 }
-                // if(scope.to !== undefined){
-                //   scope.to.disabled = isDisabled;
-                // }
+                
                 return isDisabled;
             };
         }
@@ -498,10 +487,6 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
 
         function updateListeners(fieldId) {
             if (CurrentLoadedFormService.listenersMetadata[fieldId] !== undefined) {
-
-                if (fieldId === 'onArt') {
-                    var a = 'me';
-                }
                 _.each(CurrentLoadedFormService.listenersMetadata[fieldId], function(listenerId) {
                     var fields = CurrentLoadedFormService.questionMap[listenerId];
 
@@ -509,29 +494,31 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
                         _.each(fields, function(field) {
                             if (field.runExpressions) {
                                 field.runExpressions();
+                                if (typeof field.hideExpression === 'function') {
+                                    field.hide = field.hideExpression(field.formControl.$viewValue, field.formControl.$modelValue, field, { options: field });
+                                }
                             } else if (typeof field.hideExpression === 'function') {
-                                $timeout(function(){
-                                    field.hide = field.hideExpression(undefined, undefined, undefined, {options: field});
-                                });
+                                field.hide = field.hideExpression(undefined, undefined, undefined, { options: field });
                             }
                             if (field.formControl) {
                                 field.formControl.$validate();
                             }
-                            
+
                         });
                     }
                     else {
                         if (fields.runExpressions) {
                             fields.runExpressions();
+                            if (typeof field.hideExpression === 'function') {
+                                field.hide = field.hideExpression(field.formControl.$viewValue, field.formControl.$modelValue, field, { options: field });
+                            }
                         } else if (typeof field.hideExpression === 'function') {
-                            $timeout(function(){
-                                    field.hide = field.hideExpression(undefined, undefined, undefined, {options: field});
-                                });
+                            field.hide = field.hideExpression(undefined, undefined, undefined, { options: field });
                         }
                         if (fields.formControl) {
                             fields.formControl.$validate();
                         }
-                        
+
                     }
 
                 });

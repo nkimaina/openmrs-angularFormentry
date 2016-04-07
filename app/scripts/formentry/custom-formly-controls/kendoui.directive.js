@@ -106,7 +106,9 @@ jscs:disable disallowMixedSpacesAndTabs, requireDotNotation, requirePaddingNewLi
         $scope.clearValue = function() {
           x.value = null;
         };
-        $scope.to.options.unshift({name:'',value:''});
+        if( $scope.to.options[0].name != '')
+            $scope.to.options.unshift({name:'',value:''});
+            
         $scope.selectOptions = {
           dataTextField: 'name',
           dataValueField: 'value',
