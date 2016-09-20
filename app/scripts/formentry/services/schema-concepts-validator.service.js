@@ -15,10 +15,16 @@ jscs:disable disallowMixedSpacesAndTabs, requireDotNotation, requirePaddingNewLi
 
     function SchemaConceptsValidator($log) {
         var definition = {
-            flattenSchema: flattenSchema
+            flattenSchema: flattenSchema,
+            extractUniqueConcepts: extractUniqueConcepts
         };
 
         return definition;
+
+        function extractUniqueConcepts(flattenedSchema) {
+            var obj = {};
+            return obj;
+        }
 
         function flattenSchema(formSchema) {
             var flattenedSchema = [];

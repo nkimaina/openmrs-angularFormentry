@@ -96,6 +96,76 @@
             ]
         };
 
+        var flattenedSchema = [
+            {
+                form: 'some form',
+                page: 'TB Treatment',
+                section: 'Tuberculosis History',
+                questionId: 'onTbTreatment',
+                label: 'Is patient on TB treatment?',
+                concept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
+                answers: [
+                    {
+                        concept: 'a899b35c-1350-11df-a1f1-0026b9348838',
+                        label: 'Yes'
+                    },
+                    {
+                        concept: 'a899b42e-1350-11df-a1f1-0026b9348838',
+                        label: 'No'
+                    }
+                ]
+            },
+            {
+                form: 'some form',
+                page: 'TB Treatment',
+                section: 'Tuberculosis History',
+                questionId: 'endDateTbTreatment',
+                label: 'TB treatment end-date',
+                concept: 'a8af7782-1350-11df-a1f1-0026b9348838'
+            },
+            {
+                form: 'some form',
+                page: 'TB Treatment Details',
+                section: 'Tuberculosis Drugs History',
+                label: 'Start date of TB treatment',
+                concept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
+                questions: [
+                    {
+                        concept: 'a8af7782-1350-11df-a1f1-0026b9348838',
+                        label: 'Start date of TB treatment:',
+                    },
+                    {
+                        concept: 'a8a07386-1350-11df-a1f1-0026b9348838',
+                        label: 'TB tablets per day:',
+                    }
+                ]
+            },
+            {
+                form: 'some form',
+                page: 'TB Treatment Details',
+                section: 'Tuberculosis Drugs History',
+                questionId: 'startDateOfTbTreatment',
+                label: 'Start date of TB treatment:',
+                groupConcept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
+                concept: 'a8af7782-1350-11df-a1f1-0026b9348838'
+            },
+            {
+                form: 'some form',
+                page: 'TB Treatment Details',
+                section: 'Tuberculosis Drugs History',
+                label: 'TB tablets per day:',
+                groupConcept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
+                concept: 'a8a07386-1350-11df-a1f1-0026b9348838'
+            },
+            {
+                form: 'some form',
+                page: 'TB Treatment Details',
+                section: 'Tuberculosis Drugs Further Details',
+                label: 'TB tablets per day last week:',
+                concept: 'a8a07386-1350-11df-a1f1-0026b9348838'
+            }
+        ];
+
         beforeEach(inject(function ($injector) {
             service = $injector.get('SchemaConceptsValidator');
         }));
@@ -105,79 +175,21 @@
         });
 
         it('should transfrom a schema into a flat version when flattenSchema is invoked', function () {
-            var expectedTransformedVersion = [
-                {
-                    form: 'some form',
-                    page: 'TB Treatment',
-                    section: 'Tuberculosis History',
-                    questionId: 'onTbTreatment',
-                    label: 'Is patient on TB treatment?',
-                    concept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
-                    answers: [
-                        {
-                            concept: 'a899b35c-1350-11df-a1f1-0026b9348838',
-                            label: 'Yes'
-                        },
-                        {
-                            concept: 'a899b42e-1350-11df-a1f1-0026b9348838',
-                            label: 'No'
-                        }
-                    ]
-                },
-                {
-                    form: 'some form',
-                    page: 'TB Treatment',
-                    section: 'Tuberculosis History',
-                    questionId: 'endDateTbTreatment',
-                    label: 'TB treatment end-date',
-                    concept: 'a8af7782-1350-11df-a1f1-0026b9348838'
-                },
-                {
-                    form: 'some form',
-                    page: 'TB Treatment Details',
-                    section: 'Tuberculosis Drugs History',
-                    label: 'Start date of TB treatment',
-                    concept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
-                    questions: [
-                        {
-                            concept: 'a8af7782-1350-11df-a1f1-0026b9348838',
-                            label: 'Start date of TB treatment:',
-                        },
-                        {
-                            concept: 'a8a07386-1350-11df-a1f1-0026b9348838',
-                            label: 'TB tablets per day:',
-                        }
-                    ]
-                },
-                {
-                    form: 'some form',
-                    page: 'TB Treatment Details',
-                    section: 'Tuberculosis Drugs History',
-                    questionId: 'startDateOfTbTreatment',
-                    label: 'Start date of TB treatment:',
-                    groupConcept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
-                    concept: 'a8af7782-1350-11df-a1f1-0026b9348838'
-                },
-                {
-                    form: 'some form',
-                    page: 'TB Treatment Details',
-                    section: 'Tuberculosis Drugs History',
-                    label: 'TB tablets per day:',
-                    groupConcept: 'a8afcc82-1350-11df-a1f1-0026b9348838',
-                    concept: 'a8a07386-1350-11df-a1f1-0026b9348838'
-                },
-                {
-                    form: 'some form',
-                    page: 'TB Treatment Details',
-                    section: 'Tuberculosis Drugs Further Details',
-                    label: 'TB tablets per day last week:',
-                    concept: 'a8a07386-1350-11df-a1f1-0026b9348838'
-                }
-            ];
-
             var transformedVersion = service.flattenSchema(sampleForm);
 
-            expect(JSON.stringify(expectedTransformedVersion)).to.deep.equal(JSON.stringify(transformedVersion));
+            expect(JSON.stringify(flattenedSchema)).to.deep.equal(JSON.stringify(transformedVersion));
+        });
+
+        it('should return a dictionary of unique concepts used in a flattened form schema', function(){
+            var expectedDictionary = {
+                'a8afcc82-1350-11df-a1f1-0026b9348838': null,
+                'a8af7782-1350-11df-a1f1-0026b9348838': null,
+            };
+
+            var dictionary = service.extractUniqueConcepts(flattenedSchema);
+            console.log('Expected: ', JSON.stringify(expectedDictionary));
+            console.log('Actual  : ', JSON.stringify(dictionary));
+            expect(JSON.stringify(expectedDictionary)).to.deep.equal(JSON.stringify(dictionary));
         });
 
     });
