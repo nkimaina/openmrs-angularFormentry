@@ -98,7 +98,6 @@
 
         beforeEach(inject(function ($injector) {
             service = $injector.get('SchemaConceptsValidator');
-            //currentLoadedFormService = $injector.get('CurrentLoadedFormService');
         }));
 
         it('should inject concept validator services', function () {
@@ -178,7 +177,7 @@
 
             var transformedVersion = service.flattenSchema(sampleForm);
 
-            expect(transformedVersion).to.deep.equal(expectedTransformedVersion);
+            expect(JSON.stringify(expectedTransformedVersion)).to.deep.equal(JSON.stringify(transformedVersion));
         });
 
     });
